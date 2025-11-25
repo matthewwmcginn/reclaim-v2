@@ -41,15 +41,15 @@ export function Hero() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                            <Link href="/signup">
+                            <Link href="/onboarding">
                                 <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8">
-                                    Start Reclaiming Free
+                                    Connect Your Bank Free
                                     <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
                             </Link>
                             <div className="flex items-center text-sm text-gray-500">
                                 <ShieldCheck className="h-5 w-5 text-green-500 mr-2" />
-                                Bank-grade security
+                                Bank-grade security • Powered by Plaid
                             </div>
                         </div>
                     </motion.div>
