@@ -15,11 +15,20 @@ export interface RefundOpportunity {
     pointsReward: number;
 }
 
+export interface ChartDataPoint {
+    name: string;
+    value: number;
+    date: string;
+}
+
 export function useSimulationEngine() {
     const [refunds, setRefunds] = useState<RefundOpportunity[]>([]);
     const [lastEvent, setLastEvent] = useState<string | null>(null);
     const [totalSaved, setTotalSaved] = useState(347.82);
     const [monthSaved, setMonthSaved] = useState(89.50);
+    const [isSimulationRunning, setIsSimulationRunning] = useState(true);
+    const [savingsHistory, setSavingsHistory] = useState<ChartDataPoint[]>([]);
+    const [activityData, setActivityData] = useState<ChartDataPoint[]>([]);
 
     // Initial Mock Data
     useEffect(() => {
@@ -58,6 +67,23 @@ export function useSimulationEngine() {
                 pointsReward: 75
             }
         ]);
+
+        // Initialize chart data
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        const initialSavings = months.map((month, i) => ({
+            name: month,
+            value: 250 + Math.random() * 150,
+            date: month
+        }));
+        setSavingsHistory(initialSavings);
+
+        const activities = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const initialActivity = activities.map((day, i) => ({
+            name: day,
+            value: Math.floor(Math.random() * 10) + 3,
+            date: day
+        }));
+        setActivityData(initialActivity);
     }, []);
 
     const triggerRandomEvent = useCallback(() => {
@@ -114,20 +140,58 @@ export function useSimulationEngine() {
 
     // Run Simulation
     useEffect(() => {
+        if (!isSimulationRunning) return;
+
         const interval = setInterval(triggerRandomEvent, 5000);
         return () => clearInterval(interval);
-    }, [triggerRandomEvent]);
+    }, [triggerRandomEvent, isSimulationRunning]);
 
     const claimRefund = (id: string) => {
         setRefunds(prev => prev.map(r => {
             if (r.id === id) {
                 setTotalSaved(t => t + r.amount);
                 setMonthSaved(m => m + r.amount);
+
+                // Update savings history
+                setSavingsHistory(history => {
+                    const newHistory = [...history];
+                    const lastPoint = newHistory[newHistory.length - 1];
+                    newHistory.push({
+                        name: `+${r.amount.toFixed(0)}`,
+                        value: lastPoint.value + r.amount,
+                        date: new Date().toLocaleDateString()
+                    });
+                    if (newHistory.length > 12) newHistory.shift();
+                    return newHistory;
+                });
+
                 return { ...r, status: 'processing' };
             }
             return r;
         }));
     };
 
-    return { refunds, lastEvent, totalSaved, monthSaved, claimRefund };
+    const toggleSimulation = () => {
+        setIsSimulationRunning(prev => !prev);
+    };
+
+    const resetSimulation = () => {
+        setTotalSaved(347.82);
+        setMonthSaved(89.50);
+        setRefunds(prev => prev.map(r => ({ ...r, status: 'available' })));
+        setLastEvent(null);
+    };
+
+    return {
+        refunds,
+        lastEvent,
+        totalSaved,
+        monthSaved,
+        claimRefund,
+        isSimulationRunning,
+        toggleSimulation,
+        resetSimulation,
+        savingsHistory,
+        activityData
+    };
 }

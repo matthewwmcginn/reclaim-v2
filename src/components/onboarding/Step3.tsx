@@ -3,11 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
 
-export function Step3() {
-    const router = useRouter();
+interface Step3Props {
+    onNext: () => void;
+}
 
+export function Step3({ onNext }: Step3Props) {
     return (
         <>
             <CardHeader className="text-center">
@@ -25,10 +26,15 @@ export function Step3() {
                     <p className="text-4xl font-bold text-indigo-900 mt-2">$347.82</p>
                 </div>
 
-                <Button className="w-full h-12 text-lg" onClick={() => router.push("/dashboard")}>
-                    Go to Dashboard
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
+                <div className="space-y-4">
+                    <Button className="w-full h-12 text-lg" onClick={onNext}>
+                        Continue to Subscription
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                    <p className="text-xs text-center text-gray-500">
+                        Unlock unlimited savings opportunities with Reclaim Premium
+                    </p>
+                </div>
             </CardContent>
         </>
     );
