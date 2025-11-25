@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import Link from "next/link";
 
 const tiers = [
     {
@@ -81,14 +82,16 @@ export function Pricing() {
                                     </li>
                                 ))}
                             </ul>
-                            <Button
-                                className={`w-full ${tier.popular
-                                        ? "bg-white text-gray-900 hover:bg-gray-100"
-                                        : "bg-gray-900 text-white hover:bg-gray-800"
-                                    }`}
-                            >
-                                {tier.cta}
-                            </Button>
+                            <Link href={tier.name === "Free" ? "/signup" : "/onboarding"} className="block">
+                                <Button
+                                    className={`w-full ${tier.popular
+                                            ? "bg-white text-gray-900 hover:bg-gray-100"
+                                            : "bg-gray-900 text-white hover:bg-gray-800"
+                                        }`}
+                                >
+                                    {tier.cta}
+                                </Button>
+                            </Link>
                         </div>
                     ))}
                 </div>
