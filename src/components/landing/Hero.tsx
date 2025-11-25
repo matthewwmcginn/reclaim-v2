@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { DashboardPreview } from "./DashboardPreview";
 
 export function Hero() {
     return (
@@ -86,12 +87,9 @@ export function Hero() {
                             </div>
                         </div>
 
-                        {/* Mock Dashboard Preview */}
-                        <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 aspect-[16/9] relative group">
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <p className="text-gray-400 font-medium">Interactive Dashboard Preview</p>
-                            </div>
-                            {/* We could put an actual image here later */}
+                        {/* Interactive Dashboard Preview */}
+                        <div className="rounded-xl overflow-hidden border border-gray-200 shadow-inner aspect-[16/9] relative group">
+                            <DashboardPreview />
                         </div>
                     </div>
                 </motion.div>
